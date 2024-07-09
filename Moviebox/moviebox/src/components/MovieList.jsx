@@ -1,19 +1,23 @@
 import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import Movie from "./Movie";
 
 const MovieList = (props) => {
-    return (
-      <ul>
+  return (
+    <Container>
+      <Row>
         {props.movies.map((movie) => (
-          <Movie
-            key={movie.id}
-            title={movie.title}
-            releaseDate={movie.releaseDate}
-            openingText={movie.openingText}
-          />
+          <Col key={movie.id} md={4}>
+            <Movie
+              title={movie.title}
+              releaseDate={movie.releaseDate}
+              openingText={movie.openingText}
+            />
+          </Col>
         ))}
-      </ul>
-    );
-  };
+      </Row>
+    </Container>
+  );
+};
 
 export default MovieList;
