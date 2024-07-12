@@ -2,6 +2,7 @@ import React, { useState, useRef,useEffect , useCallback } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import './App.css';
 import MovieList from './components/MovieList';
+import MovieForm from './components/Form';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -9,6 +10,7 @@ function App() {
   const [error, setError] = useState(null);
   const [retrying, setRetrying] = useState(false);
   const retryInterval = useRef(null);
+  const [addMovie,setAddMovie] = useState([]);
   
   
 
@@ -72,9 +74,15 @@ function App() {
     content = <p>Loading...</p>;
   }
 
+  function handleAddMovie(newMovie) {
+    console.log(newMovie);
+    setAddMovie((prevMovies) => [...prevMovies,newMovie])
+  }
+
   return (
     <Container>
       <section>
+       <MovieForm onAddMovie={handleAddMovie} /> 
         <Button onClick={fetchMoviesHandler} disabled={retrying}>
           {retrying ? 'Retrying...' : 'Fetch Movies'}
         </Button>
