@@ -1,6 +1,9 @@
 // Form.jsx
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 const MovieForm = ({ onAddMovie }) => {
   const [newMovie, setNewMovie] = useState({ title: '', openingText: '', releaseDate: ''  });
@@ -30,6 +33,8 @@ const MovieForm = ({ onAddMovie }) => {
       </Form.Group>
       <Form.Group controlId="releaseDate">
         <Form.Label>Release Date</Form.Label>
+        <br />
+        <DatePicker  selected = {newMovie.releaseDate} onChange={(date) => setNewMovie({...newMovie, releaseDate: date })} />
         <Form.Control
           type="date"
           value={newMovie.releaseDate}
