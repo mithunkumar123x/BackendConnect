@@ -9,8 +9,8 @@ export default function Footer() {
                     <div className="mb-6 md:mb-0">
                         <Link to="/" className="flex items-center">
                             <img
-                                src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
-                                className="mr-3 h-16"
+                                src="https://images.pexels.com/photos/1337380/pexels-photo-1337380.jpeg?auto=compress&cs=tinysrgb&w=400"
+                                className="mr-4 h-16"
                                 alt="Logo"
                             />
                         </Link>
@@ -29,6 +29,11 @@ export default function Footer() {
                                         About
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link to="/contact" className="hover:underline">
+                                       Contact Us
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                         <div>
@@ -36,7 +41,7 @@ export default function Footer() {
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
                                     <a
-                                        href="https://github.com/hiteshchoudhary"
+                                        href="https://github.com/mithunkumar123x"
                                         className="hover:underline"
                                         target="_blank"
                                         rel="noreferrer"

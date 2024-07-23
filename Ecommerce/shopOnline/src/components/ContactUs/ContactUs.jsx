@@ -17,7 +17,7 @@ export default function Contact() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://ecommerce-a8a02.firebaseio.com/contacts.json', {
+            const response = await fetch('https://ecommerce-a8a02-default-rtdb.firebaseio.com/contacts.json', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -25,16 +25,17 @@ export default function Contact() {
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                alert('Data submitted successfully!');
                 setFormData({ name: '', email: '', tel: '' });
             } else {
                 throw new Error('Network response was not ok.');
             }
         } catch (error) {
-            console.error('Error storing data: ', error);
+            
             alert('Error storing data!');
         }
     };
+
+    
 
     return (
         <form className="p-6 flex flex-col justify-center" onSubmit={handleSubmit}>
