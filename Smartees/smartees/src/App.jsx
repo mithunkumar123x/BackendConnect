@@ -1,11 +1,10 @@
-
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import MainHeader from './components/MainHeader';
 import Welcome from './pages/Welcome';
 import Product from './pages/Product';
 import AuthForm from './pages/Login';
-import AuthContextProvider from './components/context/context';
-
+import AuthContextProvider, { AuthContext } from './components/context/context';
+import { useContext } from 'react';
 
 const Layout = () => (
   <>
@@ -14,13 +13,30 @@ const Layout = () => (
   </>
 );
 
+const ProtectedRoute = ({ children }) => {
+  const authCtx = useContext(AuthContext);
+
+  if (!authCtx.isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
       { path: 'welcome', element: <Welcome /> },
-      { path: 'product', element: <Product /> },
+      { 
+        path: 'product', 
+        element: (
+          <ProtectedRoute>
+            <Product />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'login', element: <AuthForm /> }
     ],
   },
@@ -29,9 +45,8 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthContextProvider>
-         <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </AuthContextProvider>
-   
   );
 }
 
