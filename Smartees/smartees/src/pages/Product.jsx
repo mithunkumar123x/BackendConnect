@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactImageMagnify from "react-image-magnify";
 
 const Product = () => {
@@ -8,9 +8,9 @@ const Product = () => {
     inStock: true,
     sizes: ["XS", "S", "M", "L", "XL"],
     images: [
-      "\shirt (1).jpg",
-      "\shirt (2).jpg",
-      "\shirt (3).jpg",
+      "/shirt (1).jpg",
+      "/shirt (2).jpg",
+      "/shirt (3).jpg",
     ],
     reviews: [
       "Great jacket, very comfortable!",
@@ -18,6 +18,29 @@ const Product = () => {
       "Stylish and fits well.",
     ],
   };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function addProductHandler() {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://smartees-default-rtdb.firebaseio.com/product.json', {
+        method: 'POST',
+        body: JSON.stringify(product),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add product');
+      }
+      const data = await response.json();
+      console.log('Product added:', data);
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
+    setIsLoading(false);
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -73,8 +96,13 @@ const Product = () => {
               <button className="h-10 px-6 font-semibold rounded-md bg-black text-white" type="submit">
                 Buy now
               </button>
-              <button className="h-10 px-6 font-semibold rounded-md border border-slate-200 text-slate-900" type="button">
-                Add to bag
+              <button
+                className="h-10 px-6 font-semibold rounded-md border border-slate-200 text-slate-900"
+                type="button"
+                onClick={addProductHandler}
+                disabled={isLoading}
+              >
+                {isLoading ? "Adding..." : "Add to bag"}
               </button>
             </div>
             <button className="flex-none flex items-center justify-center w-9 h-9 rounded-md text-slate-300 border border-slate-200" type="button" aria-label="Like">
@@ -84,8 +112,7 @@ const Product = () => {
             </button>
           </div>
           <p className="text-sm text-slate-700">
-            Free shipping on all continental India
-             orders.
+            Free shipping on all continental India orders.
           </p>
           <h2 className="text-lg font-semibold mt-6">Reviews</h2>
           <div className="mt-4 space-y-4">
@@ -97,6 +124,6 @@ const Product = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Product;
