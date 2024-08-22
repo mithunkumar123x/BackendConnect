@@ -1,0 +1,53 @@
+/* General styles for the Product component */
+.product-container {
+    display: flex;
+    flex-direction: column; /* Stack components vertically */
+    align-items: center; /* Center align components */
+    padding: 20px; /* Add padding around the container */
+    background-color: #f9f9f9; /* Light background for contrast */
+}
+
+/* Hero section styles */
+.hero {
+    width: 100%; /* Full width */
+    margin-bottom: 30px; /* Increased space below the hero section */
+}
+
+/* Popular section styles */
+.popular {
+    width: 100%; /* Full width */
+    margin-bottom: 30px; /* Increased space below the popular section */
+}
+
+/* New Collection section styles */
+.new-collection {
+    width: 100%; /* Full width */
+    margin-bottom: 30px; /* Increased space below the new collection section */
+}
+
+/* Newsletter section styles */
+.newsletter {
+    width: 100%; /* Full width */
+    margin-bottom: 30px; /* Increased space below the newsletter section */
+}
+
+/* Optional: Add media queries for responsiveness */
+@media (max-width: 768px) {
+    .product-container {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .hero, .popular, .new-collection, .newsletter {
+        margin-bottom: 20px; /* Adjust spacing for smaller screens */
+    }
+}
+
+/* Additional styles for each section to ensure clarity */
+.hero, .popular, .new-collection, .newsletter {
+    background-color: #ffffff; /* White background for each section */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 20px; /* Padding inside each section */
+    width: 100%; /* Ensure full width */
+    max-width: 1200px; /* Optional: limit max width for larger screens */
+}

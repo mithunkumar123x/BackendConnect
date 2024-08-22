@@ -1,0 +1,117 @@
+.productdisplay {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.productdisplay-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-display-main-img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.productdisplay-right {
+    flex: 2;
+    padding: 20px;
+}
+
+.productdisplay-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.productdisplay-rating img {
+    width: 20px;
+    height: auto;
+}
+
+.productdisplay-right-prices {
+    margin-top: 20px;
+}
+
+.productdisplay-right-price-old {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.productdisplay-right-price-new {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.productdisplay-right-description {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.productdisplay-right-size {
+    margin-top: 20px;
+}
+
+.productdisplay-right-size-options {
+    display: flex;
+    gap: 10px;
+}
+
+.size-option {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.size-option:hover {
+    background-color: #e0e0e0;
+}
+
+.add-to-cart-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.add-to-cart-button:hover {
+    background-color: #218838;
+}
+
+.productdisplay-right-category {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.productdisplay-img-list {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.productdisplay-img-list img {
+    width: 80px;
+    height: auto;
+    border-radius: 5px;
+}
