@@ -12,12 +12,16 @@ import kid_banner from './Components/Assets/banner_kids.png'
 
 
 function App() {
+     
 
+  
 
   return (
    <div>
      <BrowserRouter>
-        <Navbar />
+
+      <Navbar />
+     
         <Routes>
           <Route path='/' element={<Product />} />
           <Route path='/mens' element= { <ProductCategory banner = {men_banner} category="men" />} />

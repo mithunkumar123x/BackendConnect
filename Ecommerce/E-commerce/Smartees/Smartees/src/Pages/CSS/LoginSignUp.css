@@ -1,28 +1,40 @@
-.loginsignup{
-    width: 100%;
-    height: 80vh;
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures the body takes at least the full height of the viewport */
+}
+
+.loginsignup {
+    flex: 1; /* Allows this section to grow and fill available space */
     background: #fce3fe;
     padding-top: 110px;
+    display: flex;
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center; /* Centers the container vertically */
 }
 
-.loginsignup-container{
+.loginsignup-container {
     width: 580px;
-    height: 600px;
     background: white;
-    margin: auto;
     padding: 40px 60px;
-}
-.loginsignup-container h1{
-    margin: 20px 0px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for better visibility */
+    border-radius: 8px; /* Rounds the corners of the container */
 }
 
-.loginsignup-fields{
+.loginsignup-container h1 {
+    margin: 20px 0;
+}
+
+.loginsignup-fields {
     display: flex;
     flex-direction: column;
     gap: 29px;
     margin-top: 30px;
 }
-.loginsignup-fields input{
+
+.loginsignup-fields input {
     height: 72px;
     width: 100%;
     padding-left: 20px;
@@ -30,10 +42,11 @@
     outline: none;
     color: #5c5c5c;
     font-size: 18px;
+    border-radius: 4px; /* Rounds the corners of the input fields */
 }
 
-.loginsignup-container button{
-    width: 580px;
+.loginsignup-container button {
+    width: 100%; /* Ensures the button takes the full width of the container */
     height: 72px;
     color: white;
     background: #ff4141;
@@ -42,19 +55,22 @@
     font-size: 24px;
     font-weight: 500;
     cursor: pointer;
+    border-radius: 4px; /* Rounds the corners of the button */
 }
-.loginsignup-login{
+
+.loginsignup-login {
     margin-top: 20px;
     color: #5c5c5c;
     font-size: 18px;
     font-weight: 500;
 }
 
-.loginsignup-login span{
+.loginsignup-login span {
     color: #ff4141;
     font-weight: 600;
 }
-.loginsignup-agree{
+
+.loginsignup-agree {
     display: flex;
     align-items: center;
     margin-top: 25px;
@@ -62,4 +78,14 @@
     color: #5c5c5c;
     font-size: 18px;
     font-weight: 500;
+}
+
+/* Footer styles */
+footer {
+    background: #263949; /* Example footer background color */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: relative; /* Ensures footer is positioned relative to the content */
+    width: 100%;
 }

@@ -2,15 +2,27 @@ import './Navbar.css';
 import { useState, useContext } from "react";
 import logo from '../Assets/logo.png';
 import cart_icon from '../Assets/cart_icon.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ProductContext } from '../../Context/ProductContext'; 
+import AuthContext from '../../Context/auth-context';
 
 const Navbar = () => {
     const [menu, setMenu] = useState("product");
-    const { cartItem } = useContext(ProductContext); 
+    const { cartItem } = useContext(ProductContext);
+    const authCtx = useContext(AuthContext);
+    const isLoggedIn = authCtx.isLoggedIn;
+    const navigate = useNavigate(); 
 
-  
     const totalItems = Object.values(cartItem).reduce((total, quantity) => total + quantity, 0);
+
+    const handleLoginLogout = () => {
+        if (isLoggedIn) {
+            authCtx.logout(); 
+            navigate('/'); 
+        } else {
+            navigate('/login'); 
+        }
+    };
 
     return (
         <div className='navbar'>
@@ -18,6 +30,7 @@ const Navbar = () => {
                 <img src={logo} alt="Smartees Logo" />
                 <p>Smartees</p>
             </div>
+            {isLoggedIn &&
             <ul className="nav-menu">
                 <li onClick={() => setMenu("product")}>
                     <Link to='/' className={menu === "product" ? "active" : ""}>Product</Link>
@@ -31,14 +44,14 @@ const Navbar = () => {
                 <li onClick={() => setMenu("kids")}>
                     <Link to='/kids' className={menu === "kids" ? "active" : ""}>Kids</Link>
                 </li>
-            </ul>
+            </ul> }
             <div className="nav-login-cart">
-                <Link to='/login'>
-                    <button>Login</button>
-                </Link>
-                <Link to='/cart'>
+                <button onClick={handleLoginLogout}>
+                    {isLoggedIn ? 'Logout' : 'Login'}
+                </button>
+              {isLoggedIn &&  <Link to='/cart'>
                     <img src={cart_icon} alt="Cart" />
-                </Link>
+                </Link> }
                 <div className="nav-cart-count">{totalItems}</div> 
             </div>
         </div>

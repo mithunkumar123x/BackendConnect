@@ -1,10 +1,14 @@
+
 import { Hero } from "../Components/Hero/Hero";
 import { NewCollection } from "../Components/NewCollection/NewCollection";
 import { NewsLetter } from "../Components/NewsLetter/NewsLetter";
 import { Popular } from "../Components/Popular/Popular";
 import './Product.css'
 
+
 const Product = () => {
+
+    
     return (
         <div className="product-container">
             <div className="hero">
