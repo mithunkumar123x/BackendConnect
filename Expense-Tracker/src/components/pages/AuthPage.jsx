@@ -1,10 +1,12 @@
 import { useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import AuthContext from '../context/AuthContext';
 
 export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const authCtx = useContext(AuthContext);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -19,11 +21,13 @@ export const AuthPage = () => {
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    const enteredConfirmPassword = confirmPasswordInputRef.current.value;
 
-    if (!isLogin && enteredPassword !== enteredConfirmPassword) {
-      alert('Passwords do not match!');
-      return;
+    let enteredConfirmPassword = confirmPasswordInputRef.current?.value;
+    if (!isLogin) {
+      if (enteredPassword !== enteredConfirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -62,6 +66,7 @@ export const AuthPage = () => {
       if (!isLogin) {
         console.log('User has successfully signed up.');
       }
+      navigate('/'); 
     })
     .catch((error) => {
       setIsLoading(false);
@@ -130,7 +135,7 @@ export const AuthPage = () => {
                 onClick={switchAuthModeHandler}
                 className="text-indigo-600 cursor-pointer hover:underline"
               >
-                Login here
+               Login here
               </span>
             </p>
           )}
