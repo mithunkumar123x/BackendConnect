@@ -1,12 +1,12 @@
 import { useState, useRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import AuthContext from '../context/AuthContext';
 
 export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const authCtx = useContext(AuthContext);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -34,9 +34,9 @@ export const AuthPage = () => {
     let url;
 
     if (isLogin) {
-      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB_OOBzh6TAgxkFhiKlfLtGHZkHcu9WJ6s';
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw';
     } else {
-      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB_OOBzh6TAgxkFhiKlfLtGHZkHcu9WJ6s';
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw';
     }
 
     fetch(url, {
@@ -79,8 +79,8 @@ export const AuthPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <div>
+      <div>
         <h1 className="text-2xl font-bold mb-6 text-center">{isLogin ? 'Login' : 'Sign Up'}</h1>
 
         <form onSubmit={submitHandler} className="space-y-6">
@@ -90,14 +90,12 @@ export const AuthPage = () => {
               placeholder="Email Address"
               required
               ref={emailInputRef}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <input
               type="password"
               placeholder="Password"
               required
               ref={passwordInputRef}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             {!isLogin && (
               <input
@@ -105,7 +103,6 @@ export const AuthPage = () => {
                 placeholder="Confirm Password"
                 required
                 ref={confirmPasswordInputRef}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             )}
           </div>
@@ -114,7 +111,6 @@ export const AuthPage = () => {
             {!isLoading && (
               <button
                 type="submit"
-                className="w-full px-4 py-2 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 {isLogin ? 'Login' : 'Create Account'}
               </button>
@@ -124,7 +120,7 @@ export const AuthPage = () => {
           <button
             type="button"
             onClick={switchAuthModeHandler}
-            className="w-full text-center text-indigo-600 hover:underline mt-4"
+           
           >
             {isLogin ? 'Create new account' : 'Login with existing account'}
           </button>
@@ -133,7 +129,7 @@ export const AuthPage = () => {
               Already have an account?{' '}
               <span
                 onClick={switchAuthModeHandler}
-                className="text-indigo-600 cursor-pointer hover:underline"
+                
               >
                Login here
               </span>
@@ -144,7 +140,7 @@ export const AuthPage = () => {
         {authCtx.isLoggedIn && (
           <button
             onClick={logoutHandler}
-            className="w-full mt-4 text-center text-red-600 hover:underline"
+           
           >
             Logout
           </button>
