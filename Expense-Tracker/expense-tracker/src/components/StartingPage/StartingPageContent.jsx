@@ -1,4 +1,4 @@
-import  { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import classes from './StartingPageContent.module.css';
 import AuthContext from '../store/auth-context';
 
@@ -6,8 +6,9 @@ const StartingPageContent = () => {
   const [isProfileIncomplete, setIsProfileIncomplete] = useState(true);
   const [error, setError] = useState(null);
   const [profiles, setProfiles] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
   const authCtx = useContext(AuthContext);
-  const [showForm, setShowForm] = useState(false); 
 
   useEffect(() => {
     const storedProfiles = JSON.parse(localStorage.getItem('profiles')) || [];
@@ -15,7 +16,7 @@ const StartingPageContent = () => {
   }, []);
 
   const handleCompleteProfile = () => {
-    setShowForm(true); 
+    setShowForm(true);
   };
 
   const handleUpdateProfile = async (event) => {
@@ -57,7 +58,36 @@ const StartingPageContent = () => {
 
   const handleCancel = () => {
     setShowForm(false);
-    console.log("Cancel action triggered. Redirecting...");
+    console.log("Back to previous incomplete . Redirecting...");
+  };
+
+  const handleVerifyEmail = async () => {
+    const idToken = authCtx.token;
+
+    try {
+      const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestType: 'VERIFY_EMAIL',
+          idToken: idToken,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error.message || 'Failed to send verification email.');
+      }
+
+      const data = await response.json();
+      console.log("Verification email sent to:", data.email);
+      setVerificationSent(true);
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      setError(error.message);
+    }
   };
 
   return (
@@ -71,10 +101,14 @@ const StartingPageContent = () => {
               Complete Now
             </button>
           </p>
+          <button onClick={handleVerifyEmail} className={classes.verifyButton}>
+            Verify Email
+          </button>
+          {verificationSent && <p>Check your email! A verification link has been sent.</p>}
         </div>
       ) : (
         <div className={classes.formContainer}>
-          <h1>Your profile is 64% completed. A complete profile has a higher chance of landing a job.<a>Complete now.</a></h1>
+          <h1>Your profile is 64% completed. A complete profile has a higher chance of landing a job.</h1>
           <h2>Please Update Your Profile:</h2>
           <button type="button" onClick={handleCancel} className={`${classes.button} ${classes.cancelButton}`}>
             Cancel
@@ -109,7 +143,6 @@ const StartingPageContent = () => {
             </form>
             {error && <p className={classes.error}>{error}</p>}
 
-            
             <div className={classes.profileList}>
               <h3 className="font-bold">Profiles:</h3>
               <ul>
