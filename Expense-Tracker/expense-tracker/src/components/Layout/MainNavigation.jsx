@@ -35,6 +35,9 @@ const MainNavigation = () => {
                 <Link to='/profile'>Profile</Link>                    
               </li>
               <li>
+                <Link to = '/expense'>Expense</Link>
+              </li>
+              <li>
                 <button onClick={logoutHandler}>Logout</button>
               </li>
             </>
