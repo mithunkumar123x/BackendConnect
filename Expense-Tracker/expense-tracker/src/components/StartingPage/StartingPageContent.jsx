@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import classes from './StartingPageContent.module.css';
 import AuthContext from '../store/auth-context';
+import { useHistory } from 'react-router-dom';
 
 const StartingPageContent = () => {
   const [isProfileIncomplete, setIsProfileIncomplete] = useState(true);
@@ -9,6 +10,7 @@ const StartingPageContent = () => {
   const [showForm, setShowForm] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   const authCtx = useContext(AuthContext);
+  const history = useHistory();
 
   useEffect(() => {
     const storedProfiles = JSON.parse(localStorage.getItem('profiles')) || [];
@@ -58,7 +60,7 @@ const StartingPageContent = () => {
 
   const handleCancel = () => {
     setShowForm(false);
-    console.log("Back to previous incomplete . Redirecting...");
+    console.log("Cancel action triggered. Redirecting...");
   };
 
   const handleVerifyEmail = async () => {
@@ -90,8 +92,17 @@ const StartingPageContent = () => {
     }
   };
 
+  const handleLogout = () => {
+    authCtx.logout(); // Call the logout function from context
+    localStorage.removeItem('idToken'); // Clear the idToken from local storage
+    history.replace('/auth'); // Redirect to the login page
+  };
+
   return (
     <section className={classes.container}>
+      <button onClick={handleLogout} className={classes.logoutButton}>
+        Logout
+      </button>
       {!showForm ? (
         <div className={classes.message}>
           <h1>Welcome to Expense Tracker!</h1>

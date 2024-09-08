@@ -25,11 +25,11 @@ const AuthForm = () => {
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    const enteredConfirmPassword = isLogin ? null : confirmPasswordInputRef.current.value; // Only get confirm password if not logging in
+    const enteredConfirmPassword = isLogin ? null : confirmPasswordInputRef.current.value;
 
     if (!isLogin && enteredPassword !== enteredConfirmPassword) {
       setError('Passwords do not match!');
-      return; // Exit if passwords do not match
+      return;
     }
 
     setIsLoading(true);
@@ -54,7 +54,10 @@ const AuthForm = () => {
       .then((res) => {
         setIsLoading(false);
         if (res.ok) {
+          console.log('Authentication Success');
           return res.json();
+         
+          
         } else {
           return res.json().then((data) => {
             let errorMessage = 'Authentication Failed!';
