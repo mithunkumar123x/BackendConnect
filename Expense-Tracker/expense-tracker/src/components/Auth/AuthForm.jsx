@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import  { useState, useRef, useContext } from 'react';
 import classes from './AuthForm.module.css';
 import AuthContext from '../store/auth-context';
 import { useHistory } from 'react-router-dom';
@@ -6,18 +6,18 @@ import { useHistory } from 'react-router-dom';
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  const confirmPasswordInputRef = useRef(); // Reference for confirm password
+  const confirmPasswordInputRef = useRef(); 
 
   const history = useHistory();
   const authCtx = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null); // State for error handling
+  const [error, setError] = useState(null);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
-    setError(null); // Reset error when switching modes
+    setError(null); 
   };
 
   const submitHandler = async (event) => {
@@ -56,8 +56,6 @@ const AuthForm = () => {
         if (res.ok) {
           console.log('Authentication Success');
           return res.json();
-         
-          
         } else {
           return res.json().then((data) => {
             let errorMessage = 'Authentication Failed!';
@@ -77,47 +75,89 @@ const AuthForm = () => {
       });
   };
 
+  const handleForgotPassword = async () => {
+    const enteredEmail = emailInputRef.current.value;
+    if (!enteredEmail) {
+      setError('Please enter your email address.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestType: 'PASSWORD_RESET',
+          email: enteredEmail,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error.message || 'Failed to send password reset email.');
+      }
+
+      alert('Password reset link sent! Check your email to reset your password.');
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section className={classes.auth}>
-      <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor='email'>Your Email</label>
-          <input type='email' id='email' required ref={emailInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor='password'>Your Password</label>
-          <input
-            type='password'
-            id='password'
-            required
-            ref={passwordInputRef}
-          />
-        </div>
-        {!isLogin && (
+      <div className={classes.card}>
+        <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+        <form onSubmit={submitHandler}>
           <div className={classes.control}>
-            <label htmlFor='confirm-password'>Confirm Password</label>
+            <label htmlFor='email'>Your Email</label>
+            <input type='email' id='email' required ref={emailInputRef} />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor='password'>Your Password</label>
             <input
               type='password'
-              id='confirm-password'
+              id='password'
               required
-              ref={confirmPasswordInputRef}
+              ref={passwordInputRef}
             />
           </div>
-        )}
-        {error && <p className={classes.error}>{error}</p>} 
-        <div className={classes.actions}>
-          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
-          {isLoading && <p>Sending request...</p>}
-          <button
-            type='button'
-            className={classes.toggle}
-            onClick={switchAuthModeHandler}
-          >
-            {isLogin ? 'Create new account' : 'Login with existing account'}
-          </button>
-        </div>
-      </form>
+          {!isLogin && (
+            <div className={classes.control}>
+              <label htmlFor='confirm-password'>Confirm Password</label>
+              <input
+                type='password'
+                id='confirm-password'
+                required
+                ref={confirmPasswordInputRef}
+              />
+            </div>
+          )}
+          {error && <p className={classes.error}>{error}</p>} 
+          <div className={classes.actions}>
+            {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+            {isLoading && <p>Sending request...</p>}
+            <button
+              type='button'
+              className={classes.toggle}
+              onClick={switchAuthModeHandler}
+            >
+              {isLogin ? 'Create new account' : 'Login with existing account'}
+            </button>
+            <button
+              type='button'
+              className={classes.forgotPassword}
+              onClick={handleForgotPassword}
+            >
+              Forgot Password?
+            </button>
+          </div>
+        </form>
+      </div>
     </section>
   );
 };

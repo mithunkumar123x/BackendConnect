@@ -1,72 +1,58 @@
 .auth {
-  margin: 3rem auto;
-  width: 95%;
-  max-width: 25rem;
-  border-radius: 6px;
-  background-color: #dab903;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7f7f7;
 }
 
-.auth h1 {
-  text-align: center;
-  color: white;
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 300px;
 }
 
 .control {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .control label {
   display: block;
-  color: white;
-  font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 .control input {
-  font: inherit;
-  background-color: #f1e1fc;
-  color: #38015c;
-  border-radius: 4px;
-  border: 1px solid white;
   width: 100%;
-  text-align: left;
-  padding: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .actions {
-  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .actions button {
-  cursor: pointer;
-  font: inherit;
-  color: white;
-  background-color: #9f5ccc;
-  border: 1px solid #9f5ccc;
-  border-radius: 4px;
-  padding: 0.5rem 2.5rem;
-}
-
-.actions button:hover {
-  background-color: #14aa1b;
-  border-color: #13bb13;
-}
-
-.actions .toggle {
   margin-top: 1rem;
-  background-color: transparent;
-  color: #4b5850;
+  padding: 0.5rem;
   border: none;
-  padding: 0.15rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.actions .toggle:hover {
-  background-color: transparent;
-  color: #ae82cc;
+.forgotPassword {
+  background: none;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 1rem;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
 }
