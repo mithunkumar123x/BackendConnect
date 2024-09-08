@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 
-// Create the AuthContext with default values
+
 const AuthContext = React.createContext({
-   token: '', // Use a colon instead of an equals sign
+   token: '', 
    isLoggedIn: false,
    login: (token) => {},
    logout: () => {}
 });
 
-// Create the AuthProvider component
+
 export const AuthContextProvider = (props) => {
    const [token, setToken] = useState(null);
 
-   const userIsLoggedIn = !!token; // Convert token to boolean
+   const userIsLoggedIn = !!token; 
 
    const loginHandler = (token) => {
        setToken(token);

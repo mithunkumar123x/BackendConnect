@@ -30,7 +30,7 @@ const ProductContextProvider = (props) => {
                 },
                 body: JSON.stringify({ productId: itemId, quantity: updatedCart[itemId] }),
             })
-            .catch(error => console.error('Error adding to cart:', error)); // Error handling
+            .catch(error => console.error('Error adding to cart:', error)); 
 
             return updatedCart;
         });

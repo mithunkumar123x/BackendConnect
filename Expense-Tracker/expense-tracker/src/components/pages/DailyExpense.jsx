@@ -1,24 +1,63 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../store/auth-context';
 import classes from './DailyExpense.module.css';
 
-export  const DailyExpenses = () => {
+const URL = 'https://expense-tracker-2313d-default-rtdb.firebaseio.com//expenses.json';
+
+export const DailyExpenses = () => {
   const authCtx = useContext(AuthContext);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Food'); 
   const [expenses, setExpenses] = useState([]);
+  const [error, setError] = useState(null); 
 
   const categories = ['Food', 'Petrol', 'Salary', 'Entertainment', 'Utilities', 'Other'];
 
-  const handleSubmit = (event) => {
+ 
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      const response = await fetch(URL);
+      if (!response.ok) {
+        setError("Failed to fetch expenses.");
+        return;
+      }
+      const data = await response.json();
+      const expenseList = [];
+      for (const key in data) {
+        expenseList.push({ id: key, ...data[key] });
+      }
+      setExpenses(expenseList);
+    };
+
+    fetchExpenses();
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const newExpense = { amount, description, category };
-    setExpenses((prevExpenses) => [...prevExpenses, newExpense]);
-    setAmount('');
-    setDescription('');
-    setCategory('Food'); 
+
+    // Store expense in Firebase
+    const response = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(newExpense),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      setExpenses((prevExpenses) => [...prevExpenses, { id: responseData.name, ...newExpense }]);
+      setAmount('');
+      setDescription('');
+      setCategory('Food'); 
+      setError(null); 
+    } else {
+      setError("Failed to add expense."); 
+    }
   };
+
 
   if (!authCtx.isLoggedIn) {
     return null;
@@ -65,10 +104,12 @@ export  const DailyExpenses = () => {
         <button type='submit'>Add Expense</button>
       </form>
       
+      {error && <p className={classes.error}>{error}</p>} 
+
       <h3>Added Expenses:</h3>
       <ul className={classes.expenseList}>
-        {expenses.map((expense, index) => (
-          <li key={index}>
+        {expenses.map((expense) => (
+          <li key={expense.id}>
             <span>{expense.amount} - {expense.description} ({expense.category})</span>
           </li>
         ))}
@@ -76,5 +117,3 @@ export  const DailyExpenses = () => {
     </section>
   );
 };
-
-

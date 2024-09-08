@@ -35,7 +35,9 @@ export const ProductDisplay = (props) => {
                     </div>
                 </div>
                 <div className='productdisplay-right-description'>
-                    A lightweight, usually knitted, pullover shirt, close-fitting with a round neckline and short sleeves, worn as an undershirt or outer.
+                    A lightweight, usually knitted, pullover shirt,
+                     close-fitting with a round neckline and short sleeves,
+                      worn as an undershirt or outer.
                 </div>
                 <div className='productdisplay-right-size'>
                     <h1>Select Size</h1>
