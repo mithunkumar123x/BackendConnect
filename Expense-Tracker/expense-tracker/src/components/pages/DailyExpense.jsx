@@ -1,20 +1,19 @@
-import { useState, useContext, useEffect } from 'react';
-import AuthContext from '../store/auth-context';
+import { useState, useEffect } from 'react';
 import classes from './DailyExpense.module.css';
 
-const URL = 'https://expense-tracker-2313d-default-rtdb.firebaseio.com//expenses.json';
+const URL = 'https://expense-tracker-2313d-default-rtdb.firebaseio.com/expenses.json';
 
 export const DailyExpenses = () => {
-  const authCtx = useContext(AuthContext);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Food'); 
   const [expenses, setExpenses] = useState([]);
   const [error, setError] = useState(null); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentExpenseId, setCurrentExpenseId] = useState(null);
 
   const categories = ['Food', 'Petrol', 'Salary', 'Entertainment', 'Utilities', 'Other'];
 
- 
   useEffect(() => {
     const fetchExpenses = async () => {
       const response = await fetch(URL);
@@ -37,35 +36,74 @@ export const DailyExpenses = () => {
     event.preventDefault();
     const newExpense = { amount, description, category };
 
-    // Store expense in Firebase
-    const response = await fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify(newExpense),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    if (isEditing) {
+      const response = await fetch(`https://expense-tracker-2313d-default-rtdb.firebaseio.com/expenses/${currentExpenseId}.json`, {
+        method: 'PUT',
+        body: JSON.stringify(newExpense),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setExpenses((prevExpenses) => 
+          prevExpenses.map(expense => 
+            expense.id === currentExpenseId ? { id: currentExpenseId, ...newExpense } : expense
+          )
+        );
+        console.log("Expense successfully updated");
+      } else {
+        setError("Failed to update expense.");
+      }
+    } else {
+      const response = await fetch(URL, {
+        method: 'POST',
+        body: JSON.stringify(newExpense),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        setExpenses((prevExpenses) => [...prevExpenses, { id: responseData.name, ...newExpense }]);
+        console.log("Expense successfully added");
+      } else {
+        setError("Failed to add expense.");
+      }
+    }
+
+    setAmount('');
+    setDescription('');
+    setCategory('Food'); 
+    setIsEditing(false);
+    setCurrentExpenseId(null);
+  };
+
+  const handleDelete = async (id) => {
+    const response = await fetch(`https://expense-tracker-2313d-default-rtdb.firebaseio.com/expenses/${id}.json`, {
+      method: 'DELETE',
     });
 
     if (response.ok) {
-      const responseData = await response.json();
-      setExpenses((prevExpenses) => [...prevExpenses, { id: responseData.name, ...newExpense }]);
-      setAmount('');
-      setDescription('');
-      setCategory('Food'); 
-      setError(null); 
+      setExpenses((prevExpenses) => prevExpenses.filter(expense => expense.id !== id));
+      console.log("Expense successfully deleted");
     } else {
-      setError("Failed to add expense."); 
+      setError("Failed to delete expense.");
     }
   };
 
-
-  if (!authCtx.isLoggedIn) {
-    return null;
-  }
+  const handleEdit = (expense) => {
+    setAmount(expense.amount);
+    setDescription(expense.description);
+    setCategory(expense.category);
+    setIsEditing(true);
+    setCurrentExpenseId(expense.id);
+  };
 
   return (
     <section className={classes.expenses}>
-      <h2>Add Daily Expenses</h2>
+      <h2>{isEditing ? 'Edit Expense' : 'Add Daily Expenses'}</h2>
       <form onSubmit={handleSubmit} className={classes.form}>
         <div className={classes.control}>
           <label htmlFor='amount'>Amount Spent</label>
@@ -101,7 +139,7 @@ export const DailyExpenses = () => {
             ))}
           </select>
         </div>
-        <button type='submit'>Add Expense</button>
+        <button type='submit'>{isEditing ? 'Update Expense' : 'Add Expense'}</button>
       </form>
       
       {error && <p className={classes.error}>{error}</p>} 
@@ -111,6 +149,8 @@ export const DailyExpenses = () => {
         {expenses.map((expense) => (
           <li key={expense.id}>
             <span>{expense.amount} - {expense.description} ({expense.category})</span>
+            <button onClick={() => handleEdit(expense)}>Edit</button>
+            <button onClick={() => handleDelete(expense.id)}>Delete</button>
           </li>
         ))}
       </ul>
