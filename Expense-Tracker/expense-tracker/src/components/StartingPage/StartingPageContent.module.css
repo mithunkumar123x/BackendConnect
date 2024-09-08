@@ -1,0 +1,79 @@
+.container {
+  padding: 2rem;
+}
+
+.message {
+  text-align: center;
+}
+
+.formContainer {
+  margin-top: 2rem;
+}
+
+.completeButton {
+  background-color: #4CAF50; 
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.completeButton:hover {
+  background-color: #45a049; 
+}
+
+.button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: #f44336; 
+  color: white;
+}
+
+.cancelButton:hover {
+  background-color: #e53935; 
+}
+
+.updateButton {
+  background-color: #2196F3; 
+  color: white;
+}
+
+.updateButton:hover {
+  background-color: #1976D2; 
+}
+
+.profileList {
+  margin-top: 1rem;
+}
+
+.profileItem {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.profileImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.profileName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
