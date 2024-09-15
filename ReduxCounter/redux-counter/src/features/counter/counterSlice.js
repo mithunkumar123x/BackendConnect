@@ -17,15 +17,21 @@ const initialState = {
             incrementBy5  : ( state) => {
                 state.value += 5;
             },
+            incrementBy2  : ( state) => {
+                state.value += 2;
+            },
                
             decrement : (state) => {
                 if (state.value > 0) {
                     state.value -= 1;
                 }
             },
+             decrementBy2  : ( state) => {
+                state.value -= 2;
+            },
          }
     })
 
-    export const  { increment,decrement , incrementBy5 } = counterSlice.actions;
+    export const  { increment,decrement , incrementBy5 , incrementBy2,decrementBy2 } = counterSlice.actions;
     export default counterSlice.reducer;
 
