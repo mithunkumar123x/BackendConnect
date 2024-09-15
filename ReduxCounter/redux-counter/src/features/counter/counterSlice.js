@@ -27,11 +27,11 @@ const initialState = {
                 }
             },
              decrementBy2  : ( state) => {
-                state.value -= 2;
+                state.value -= 5;
             },
          }
     })
 
-    export const  { increment,decrement , incrementBy5 , incrementBy2,decrementBy2 } = counterSlice.actions;
+    export const  { increment,decrement , incrementBy5 , incrementBy2,decrementBy5 } = counterSlice.actions;
     export default counterSlice.reducer;
 
