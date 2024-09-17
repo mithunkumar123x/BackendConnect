@@ -1,18 +1,19 @@
-import  { useState, useRef, useContext } from 'react';
-import classes from './AuthForm.module.css';
-import AuthContext from '../store/auth-context';
+import { useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { authActions } from '../store/authSlice';
+import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  const confirmPasswordInputRef = useRef(); 
+  const confirmPasswordInputRef = useRef();
 
   const history = useHistory();
-  const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
 
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const [isLogin, setIsLogin] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const switchAuthModeHandler = () => {
@@ -32,7 +33,8 @@ const AuthForm = () => {
       return;
     }
 
-    setIsLoading(true);
+    dispatch(authActions.setLoading(true));
+
     let url;
     if (isLogin) {
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw';
@@ -40,39 +42,36 @@ const AuthForm = () => {
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw';
     }
 
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
-        returnSecureToken: true,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.ok) {
-          console.log('Authentication Success');
-          return res.json();
-        } else {
-          return res.json().then((data) => {
-            let errorMessage = 'Authentication Failed!';
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message;
-            }
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .then((data) => {
-        authCtx.login(data.idToken);
-        history.replace('/');
-      })
-      .catch((err) => {
-        setError(err.message);
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) {
+        const data = await response.json();
+        let errorMessage = 'Authentication failed!';
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      dispatch(authActions.login(data.idToken));
+      history.replace('/');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      dispatch(authActions.setLoading(false));
+    }
   };
 
   const handleForgotPassword = async () => {
@@ -82,18 +81,22 @@ const AuthForm = () => {
       return;
     }
 
-    setIsLoading(true);
+    dispatch(authActions.setLoading(true));
+
     try {
-      const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          requestType: 'PASSWORD_RESET',
-          email: enteredEmail,
-        }),
-      });
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            requestType: 'PASSWORD_RESET',
+            email: enteredEmail,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();
@@ -104,7 +107,7 @@ const AuthForm = () => {
     } catch (error) {
       setError(error.message);
     } finally {
-      setIsLoading(false);
+      dispatch(authActions.setLoading(false));
     }
   };
 
@@ -119,40 +122,22 @@ const AuthForm = () => {
           </div>
           <div className={classes.control}>
             <label htmlFor='password'>Your Password</label>
-            <input
-              type='password'
-              id='password'
-              required
-              ref={passwordInputRef}
-            />
+            <input type='password' id='password' required ref={passwordInputRef} />
           </div>
           {!isLogin && (
             <div className={classes.control}>
               <label htmlFor='confirm-password'>Confirm Password</label>
-              <input
-                type='password'
-                id='confirm-password'
-                required
-                ref={confirmPasswordInputRef}
-              />
+              <input type='password' id='confirm-password' required ref={confirmPasswordInputRef} />
             </div>
           )}
-          {error && <p className={classes.error}>{error}</p>} 
+          {error && <p className={classes.error}>{error}</p>}
           <div className={classes.actions}>
             {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
             {isLoading && <p>Sending request...</p>}
-            <button
-              type='button'
-              className={classes.toggle}
-              onClick={switchAuthModeHandler}
-            >
+            <button type='button' className={classes.toggle} onClick={switchAuthModeHandler}>
               {isLogin ? 'Create new account' : 'Login with existing account'}
             </button>
-            <button
-              type='button'
-              className={classes.forgotPassword}
-              onClick={handleForgotPassword}
-            >
+            <button type='button' className={classes.forgotPassword} onClick={handleForgotPassword}>
               Forgot Password?
             </button>
           </div>

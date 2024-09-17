@@ -1,7 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import classes from './StartingPageContent.module.css';
-import AuthContext from '../store/auth-context';
 import { useHistory } from 'react-router-dom';
+import { authActions } from '../store/authSlice'; // Import your auth actions
 
 const StartingPageContent = () => {
   const [isProfileIncomplete, setIsProfileIncomplete] = useState(true);
@@ -9,7 +10,9 @@ const StartingPageContent = () => {
   const [profiles, setProfiles] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
-  const authCtx = useContext(AuthContext);
+  
+  const token = useSelector((state) => state.auth.token); // Access token from Redux state
+  const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
@@ -30,7 +33,7 @@ const StartingPageContent = () => {
       const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw', {
         method: 'POST',
         body: JSON.stringify({
-          idToken: authCtx.token,
+          idToken: token,
           displayName: name,
           photoUrl: photoUrl,
           returnSecureToken: true,
@@ -64,17 +67,15 @@ const StartingPageContent = () => {
   };
 
   const handleVerifyEmail = async () => {
-    const idToken = authCtx.token;
-
     try {
-      const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw`, {
+      const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCqsq7UqyLZoMuNmuOxLnxY2z4wv5WYEaw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           requestType: 'VERIFY_EMAIL',
-          idToken: idToken,
+          idToken: token,
         }),
       });
 
@@ -93,9 +94,9 @@ const StartingPageContent = () => {
   };
 
   const handleLogout = () => {
-    authCtx.logout(); // Call the logout function from context
-    localStorage.removeItem('idToken'); // Clear the idToken from local storage
-    history.replace('/auth'); // Redirect to the login page
+    dispatch(authActions.logout()); 
+    localStorage.removeItem('idToken'); 
+    history.replace('/auth');
   };
 
   return (
@@ -128,7 +129,7 @@ const StartingPageContent = () => {
             <form className="md:flex md:items-center mb-6" onSubmit={handleUpdateProfile}>
               <label>
                 <img
-                  src="https://th.bing.com/th?id=OIP.E6-fcGDeuehNrqgvJ-gFHwAAAA&w=250&h=250&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
+                  src="https://th.bing.com/th?id=OIP.NGIDdVP6vw9ue_D-mrEVFQHaHa&w=250&h=250&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
                   alt="GitHub Logo"
                   className={classes.logo}
                 />
@@ -138,7 +139,7 @@ const StartingPageContent = () => {
               
               <label>
                 <img
-                  src="https://th.bing.com/th?id=OIP.NGIDdVP6vw9ue_D-mrEVFQHaHa&w=250&h=250&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
+                  src="https://th.bing.com/th?id=OIP.E6-fcGDeuehNrqgvJ-gFHwAAAA&w=250&h=250&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
                   alt="Web Logo"
                   className={classes.logo}
                 />

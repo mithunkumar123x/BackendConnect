@@ -1,5 +1,6 @@
 import { Switch, Route } from 'react-router-dom';
 
+import './App.css';
 import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
 import AuthPage from './components/pages/AuthPage';

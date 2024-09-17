@@ -6,11 +6,12 @@ const URL = 'https://expense-tracker-2313d-default-rtdb.firebaseio.com/expenses.
 export const DailyExpenses = () => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Food'); 
+  const [category, setCategory] = useState('Food');
   const [expenses, setExpenses] = useState([]);
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [currentExpenseId, setCurrentExpenseId] = useState(null);
+  const [showPremiumButton, setShowPremiumButton] = useState(false);
 
   const categories = ['Food', 'Petrol', 'Salary', 'Entertainment', 'Utilities', 'Other'];
 
@@ -23,10 +24,14 @@ export const DailyExpenses = () => {
       }
       const data = await response.json();
       const expenseList = [];
+      let totalAmount = 0;
       for (const key in data) {
-        expenseList.push({ id: key, ...data[key] });
+        const expense = { id: key, ...data[key] };
+        expenseList.push(expense);
+        totalAmount += parseFloat(expense.amount);
       }
       setExpenses(expenseList);
+      setShowPremiumButton(totalAmount > 10000);
     };
 
     fetchExpenses();
@@ -46,8 +51,8 @@ export const DailyExpenses = () => {
       });
 
       if (response.ok) {
-        setExpenses((prevExpenses) => 
-          prevExpenses.map(expense => 
+        setExpenses((prevExpenses) =>
+          prevExpenses.map((expense) =>
             expense.id === currentExpenseId ? { id: currentExpenseId, ...newExpense } : expense
           )
         );
@@ -73,9 +78,13 @@ export const DailyExpenses = () => {
       }
     }
 
+   
+    const updatedTotalAmount = expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0) + parseFloat(amount);
+    setShowPremiumButton(updatedTotalAmount > 10000);
+
     setAmount('');
     setDescription('');
-    setCategory('Food'); 
+    setCategory('Food');
     setIsEditing(false);
     setCurrentExpenseId(null);
   };
@@ -86,11 +95,15 @@ export const DailyExpenses = () => {
     });
 
     if (response.ok) {
-      setExpenses((prevExpenses) => prevExpenses.filter(expense => expense.id !== id));
+      setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
       console.log("Expense successfully deleted");
     } else {
       setError("Failed to delete expense.");
     }
+
+  
+    const updatedTotalAmount = expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0);
+    setShowPremiumButton(updatedTotalAmount > 10000);
   };
 
   const handleEdit = (expense) => {
@@ -99,6 +112,11 @@ export const DailyExpenses = () => {
     setCategory(expense.category);
     setIsEditing(true);
     setCurrentExpenseId(expense.id);
+  };
+
+  const handleActivatePremium = () => {
+    console.log('Activate Premium button clicked');
+    
   };
 
   return (
@@ -141,8 +159,14 @@ export const DailyExpenses = () => {
         </div>
         <button type='submit'>{isEditing ? 'Update Expense' : 'Add Expense'}</button>
       </form>
-      
-      {error && <p className={classes.error}>{error}</p>} 
+
+      {error && <p className={classes.error}>{error}</p>}
+
+      {showPremiumButton && (
+        <button onClick={handleActivatePremium} className={classes.activatePremiumButton}>
+          Activate Premium
+        </button>
+      )}
 
       <h3>Added Expenses:</h3>
       <ul className={classes.expenseList}>
