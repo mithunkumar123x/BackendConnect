@@ -39,8 +39,9 @@ const AddExpense = ({ isEditing, currentExpense, onCancelEdit }) => {
         dispatch(addExpense(newExpense));
       }
 
-      if (!response.ok) throw new Error(isEditing ? 'Failed to update expense.' : 'Failed to add expense.');
-
+      if (!response.ok) { 
+        throw new Error(isEditing ? 'Failed to update expense.' : 'Failed to add expense.');  
+      }
       const updatedTotalAmount = expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0) + parseFloat(amount);
       if (updatedTotalAmount > 10000) {
         dispatch(activatePremium());
@@ -58,10 +59,10 @@ const AddExpense = ({ isEditing, currentExpense, onCancelEdit }) => {
   };
 
   return (
-    <section className={classes.formSection}>
+    <section>
       <h2>{isEditing ? 'Edit Expense' : 'Add Daily Expenses'}</h2>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <div className={classes.control}>
+      <form onSubmit={handleSubmit}>
+        <div>
           <label htmlFor='amount'>Amount Spent</label>
           <input
             type='number'
@@ -71,7 +72,7 @@ const AddExpense = ({ isEditing, currentExpense, onCancelEdit }) => {
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
-        <div className={classes.control}>
+        <div>
           <label htmlFor='description'>Description</label>
           <input
             type='text'
@@ -81,7 +82,7 @@ const AddExpense = ({ isEditing, currentExpense, onCancelEdit }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <div className={classes.control}>
+        <div>
           <label htmlFor='category'>Category</label>
           <select id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
             {categories.map((cat) => (
@@ -93,7 +94,7 @@ const AddExpense = ({ isEditing, currentExpense, onCancelEdit }) => {
         </div>
         <button type='submit'>{isEditing ? 'Update Expense' : 'Add Expense'}</button>
       </form>
-      {error && <p className={classes.error}>{error}</p>}
+      {error && <p>{error}</p>}
     </section>
   );
 };

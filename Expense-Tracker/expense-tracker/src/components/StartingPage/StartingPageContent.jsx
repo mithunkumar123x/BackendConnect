@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classes from './StartingPageContent.module.css';
 import { useHistory } from 'react-router-dom';
-import { authActions } from '../store/authSlice'; // Import your auth actions
+import { authActions } from '../store/authSlice'; 
 
 const StartingPageContent = () => {
   const [isProfileIncomplete, setIsProfileIncomplete] = useState(true);
@@ -11,7 +11,7 @@ const StartingPageContent = () => {
   const [showForm, setShowForm] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   
-  const token = useSelector((state) => state.auth.token); // Access token from Redux state
+  const token = useSelector((state) => state.auth.token); 
   const dispatch = useDispatch();
   const history = useHistory();
 

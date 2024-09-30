@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { restoreExpense, resetExpense } from '../store/expenseSlice';
 
-
 const ExpenseList = ({ onEditExpense }) => {
   const expenses = useSelector((store) => store.expenses.expenses);
   const dispatch = useDispatch();
@@ -11,7 +10,7 @@ const ExpenseList = ({ onEditExpense }) => {
     try {
       const response = await fetch('https://expense-tracker-2313d-default-rtdb.firebaseio.com/expenses.json');
       const data = await response.json();
-      if (data) {
+      if (data) { 
         const allId = Object.keys(data);
         const allExpenses = Object.values(data).map((item, index) => ({ ...item, id: allId[index] }));
         dispatch(restoreExpense(allExpenses));
@@ -40,9 +39,9 @@ const ExpenseList = ({ onEditExpense }) => {
   }, []);
 
   return (
-    <section className={classes.expenseListSection}>
+    <section>
       <h3>Added Expenses:</h3>
-      <ul className={classes.expenseList}>
+      <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
             <span>{expense.amount} - {expense.description} ({expense.category})</span>
