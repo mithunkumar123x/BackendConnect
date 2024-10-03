@@ -1,13 +1,21 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { useDispatch, useSelector } from 'react-redux';
 import ExpenseList from './ExpenseList';
 import { restoreExpense, resetExpense } from '../store/expenseSlice';
 
-
+jest.mock('react-redux', () => ({
+  useDispatch: jest.fn(),
+  useSelector: jest.fn(),
+}));
 
 describe('ExpenseList Component', () => {
-  test('calls getExpenses on mount', () => {
+  beforeEach(() => {
+    useDispatch.mockClear();
+    useSelector.mockClear();
+  });
+
+  test('calls getExpenses on mount', async () => {
     const getExpenses = jest.fn();
-    useEffect.mockImplementationOnce(f => f());
     render(<ExpenseList />);
     expect(getExpenses).toHaveBeenCalled();
   });
