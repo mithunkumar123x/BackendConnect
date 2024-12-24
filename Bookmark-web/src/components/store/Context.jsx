@@ -1,4 +1,3 @@
-// src/context/BookmarkContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const BookmarkContext = createContext();
@@ -13,35 +12,62 @@ export const BookmarkProvider = ({ children }) => {
   const [editingBookmark, setEditingBookmark] = useState(null);
   const [formData, setFormData] = useState({ title: '', url: '' });
 
-  useEffect(() => {
-  
-    fetchBookmarks();
-  }, []);
-
   const fetchBookmarks = async () => {
-    const response = await fetch('https://crudcrud.com/api/786aba94236a49acbf62dc7de66d7e46/bookmarks'); 
+    const response = await fetch('https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks');
     const data = await response.json();
     setBookmarks(data);
   };
 
+  useEffect(() => {
+    fetchBookmarks();
+  }, []);
+
   const addBookmark = async () => {
-    await fetch('/api/bookmarks', {
+    const response = await fetch('https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
-    fetchBookmarks();
-    setIsModalOpen(false);
+
+    if (response.ok) {
+      fetchBookmarks();
+      setIsModalOpen(false);
+      setFormData({ title: '', url: '' });
+    } else {
+      console.error('Failed to add bookmark:', response.statusText);
+    }
   };
 
   const updateBookmark = async () => {
-    await fetch(`https://crudcrud.com/api/786aba94236a49acbf62dc7de66d7e46/bookmarks/${editingBookmark.id}`, {
+    const response = await fetch(`https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks/${editingBookmark.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
-    fetchBookmarks();
-    setIsModalOpen(false);
+
+    if (response.ok) {
+      fetchBookmarks();
+      setIsModalOpen(false);
+      setEditingBookmark(null);
+      setFormData({ title: '', url: '' });
+    } else {
+      console.error('Failed to update bookmark:', response.statusText);
+    }
+  };
+
+  const deleteBookmark = async (id) => {
+    const response = await fetch(`https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      fetchBookmarks();
+    } else {
+      console.error('Failed to delete bookmark:', response.statusText);
+      // Handle the error gracefully, e.g., display a message to the user
+    }
+   throw new error;
+    console.error('Error deleting bookmark:', error);
   };
 
   const handleAddNew = () => {
@@ -66,6 +92,7 @@ export const BookmarkProvider = ({ children }) => {
     handleEdit,
     addBookmark,
     updateBookmark,
+    deleteBookmark, 
     setIsModalOpen,
   };
 

@@ -6,7 +6,7 @@ const Bookmark = ({ bookmark, onEdit, onDelete }) => (
     <p>{bookmark.url}</p>
     <div className="bookmark-actions">
       <button onClick={() => onEdit(bookmark)}>Edit</button>
-      <button onClick={() => onDelete(bookmark.id)}>Close</button>
+      <button onClick={() => onDelete(bookmark.id)}>Delete</button>
     </div>
   </div>
 );

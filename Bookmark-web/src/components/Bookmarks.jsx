@@ -1,7 +1,7 @@
 import React from 'react';
 import Bookmark from '../components/Bookmark';
 import Modal from '../components/Modal';
-import { useBookmarks } from './store/BookmarkContext';
+import { useBookmarks } from './store/Context';
 
 const Bookmarks = () => {
   const {
@@ -15,7 +15,8 @@ const Bookmarks = () => {
     updateBookmark,
     editingBookmark,
     setIsModalOpen,
-  }     = useBookmarks();
+    deleteBookmark, // Add deleteBookmark to the context
+  } = useBookmarks();
 
   const handleSave = () => {
     if (editingBookmark) {
@@ -32,19 +33,29 @@ const Bookmarks = () => {
         <button onClick={handleAddNew}>Add New</button>
       </header>
       <div className="bookmarks-list">
-        {bookmarks.map((bookmark) => (
-          <Bookmark key={bookmark.id} bookmark={bookmark} onEdit={handleEdit} />
-        ))}
+        <h1>ALL BOOKMARKS :</h1>
+        {bookmarks.length === 0 || (
+          bookmarks.map((bookmark) => (
+            <Bookmark
+              key={bookmark._id || bookmark.id}
+              bookmark={bookmark}
+              onEdit={handleEdit}
+              onDelete={deleteBookmark}
+            />
+          ))
+        )}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>{editingBookmark ? 'Edit Bookmark' : 'Add New Bookmark'}</h2>
         <form>
+          <label htmlFor="Title">Website Title :</label>
           <input
             type="text"
             placeholder="Title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
+          <label>Website URL :</label>
           <input
             type="text"
             placeholder="URL"
@@ -52,7 +63,10 @@ const Bookmarks = () => {
             onChange={(e) => setFormData({ ...formData, url: e.target.value })}
           />
           <button type="button" onClick={handleSave}>
-            {editingBookmark ? 'Update' : 'Add'}
+            ADD NOW
+          </button>
+          <button type="button" onClick={() => setIsModalOpen(false)}>
+            CLOSE
           </button>
         </form>
       </Modal>
