@@ -9,13 +9,12 @@ const Backdrop = ({ onClose }) => {
 const ModalOverlay = ({ children, onClose }) => {
   return (
     <div className={classes.modal}>
+      
       <header className={classes.header}>
         <h2>Add Website</h2>
       </header>
       <div className={classes.content}>{children}</div>
-      <footer className={classes.actions}>
-        <button onClick={onClose}>Close</button>
-      </footer>
+       
     </div>
   );
 };
