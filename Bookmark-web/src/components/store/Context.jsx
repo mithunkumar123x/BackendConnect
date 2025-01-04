@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const BookmarkContext = createContext();
+const BookmarkContext = React.createContext();
 
 export const useBookmarks = () => {
   return useContext(BookmarkContext);
@@ -12,8 +12,10 @@ export const BookmarkProvider = ({ children }) => {
   const [editingBookmark, setEditingBookmark] = useState(null);
   const [formData, setFormData] = useState({ title: '', url: '' });
 
+  const Url = 'https://crudcrud.com/api/102090af021c4da98d9420c5b85407be';
+
   const fetchBookmarks = async () => {
-    const response = await fetch('https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks');
+    const response = await fetch(`${Url}/bookmarks`);
     const data = await response.json();
     setBookmarks(data);
   };
@@ -23,7 +25,7 @@ export const BookmarkProvider = ({ children }) => {
   }, []);
 
   const addBookmark = async () => {
-    const response = await fetch('https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks', {
+    const response = await fetch(`${Url}/bookmarks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -39,7 +41,7 @@ export const BookmarkProvider = ({ children }) => {
   };
 
   const updateBookmark = async () => {
-    const response = await fetch(`https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks/${editingBookmark.id}`, {
+    const response = await fetch(`${Url}/bookmarks/${editingBookmark.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -56,19 +58,26 @@ export const BookmarkProvider = ({ children }) => {
   };
 
   const deleteBookmark = async (id) => {
-    const response = await fetch(`https://crudcrud.com/api/3e9c995804f6419f85e6472b5a881d87/bookmarks/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      fetchBookmarks();
-    } else {
-      console.error('Failed to delete bookmark:', response.statusText);
-      // Handle the error gracefully, e.g., display a message to the user
+    if(!id) {
+      console.error('Bookmark Id is undefined');
+      return;
     }
-   throw new error;
-    console.error('Error deleting bookmark:', error);
+    try {
+      const response = await fetch(`${Url}/bookmarks/${id}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        fetchBookmarks();
+        setFormData( { title : '' , url : ''} )
+      } else {
+        console.error('Failed to delete bookmark:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting bookmark:', error);
+    }
   };
+  
 
   const handleAddNew = () => {
     setIsModalOpen(true);
@@ -92,7 +101,7 @@ export const BookmarkProvider = ({ children }) => {
     handleEdit,
     addBookmark,
     updateBookmark,
-    deleteBookmark, 
+    deleteBookmark,
     setIsModalOpen,
   };
 

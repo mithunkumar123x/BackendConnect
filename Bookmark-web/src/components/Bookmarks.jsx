@@ -15,7 +15,7 @@ const Bookmarks = () => {
     updateBookmark,
     editingBookmark,
     setIsModalOpen,
-    deleteBookmark, // Add deleteBookmark to the context
+    deleteBookmark, 
   } = useBookmarks();
 
   const handleSave = () => {
@@ -33,11 +33,11 @@ const Bookmarks = () => {
         <button onClick={handleAddNew}>Add New</button>
       </header>
       <div className="bookmarks-list">
-        <h1>ALL BOOKMARKS :</h1>
+        <h1>ALL BOOKMARKS : </h1>
         {bookmarks.length === 0 || (
           bookmarks.map((bookmark) => (
             <Bookmark
-              key={bookmark._id || bookmark.id}
+              key={bookmark.id}
               bookmark={bookmark}
               onEdit={handleEdit}
               onDelete={deleteBookmark}
@@ -46,7 +46,6 @@ const Bookmarks = () => {
         )}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2>{editingBookmark ? 'Edit Bookmark' : 'Add New Bookmark'}</h2>
         <form>
           <label htmlFor="Title">Website Title :</label>
           <input
@@ -58,7 +57,7 @@ const Bookmarks = () => {
           <label>Website URL :</label>
           <input
             type="text"
-            placeholder="URL"
+            placeholder="Website Url"
             value={formData.url}
             onChange={(e) => setFormData({ ...formData, url: e.target.value })}
           />

@@ -1,11 +1,12 @@
 import Bookmarks from './components/Bookmarks'
-//  import './App.css'
+ import './App.css'
 
 function App() {
  
 
   return (
     <>
+  
      <Bookmarks />
     </>
   )

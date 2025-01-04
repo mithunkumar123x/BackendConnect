@@ -1,13 +1,14 @@
 import React from 'react';
 
 const Bookmark = ({ bookmark, onEdit, onDelete }) => (
-  <div className="bookmark-item">
-    <h3>{bookmark.title}</h3>
-    <p>{bookmark.url}</p>
-    <div className="bookmark-actions">
+  <div>
+    <h2>{bookmark.title}- 
+    <a href={bookmark.url}
+    >{bookmark.url} 
+    </a> </h2>
       <button onClick={() => onEdit(bookmark)}>Edit</button>
-      <button onClick={() => onDelete(bookmark.id)}>Delete</button>
-    </div>
+      <button onClick={() => onDelete(bookmark._id)}>Delete</button>
+  
   </div>
 );
 

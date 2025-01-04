@@ -1,7 +1,5 @@
-/* Modal.module.css */
-
 .backdrop {
-    position: fixed;
+    position: centre;
     top: 0;
     left: 0;
     width: 100%;
@@ -17,7 +15,7 @@
     transform: translateX(-50%);
     width: 90%;
     max-width: 40rem;
-    background: white;
+    background: rgb(165, 136, 136);
     padding: 1rem;
     border-radius: 14px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
@@ -26,7 +24,7 @@
   }
   
   .header {
-    background: #ff2058;
+    background: #1a121400;
     padding: 1rem;
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
@@ -44,7 +42,7 @@
   }
   
   .actions button {
-    margin: 0 0.25rem;
+    margin: 0 0.5rem;
   }
   
   @keyframes slide-down {
